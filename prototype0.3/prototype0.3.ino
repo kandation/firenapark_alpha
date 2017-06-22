@@ -143,21 +143,58 @@ void circleLight(int num , String RGB){
        // Serial.println(i); 
         pixels.show();
         delay(100);
-        pixels.setPixelColor(i, 0,0,0);
+        /*pixels.setPixelColor(i, 0,0,0);
         pixels.setPixelColor(i+1, 0,0,0);
         pixels.setPixelColor(i+2, 0,0,0);
+        pixels.show();*/
+    }
+       
+}
+void circleLight4(){
+    int randNumber = random(0,5);
+    int randNumber2 = random(0,5);
+    int randNumber3 = random(0,5);
+    int randNumber4 = random(0,5);
+    int randNumber5 = random(0,5);
+    for(int i= 0 ; i< pixelNum ;i+=3){
+        pixels.setPixelColor(i, pixels.Color(rgbArray(pattern[randNumber],'R'),rgbArray(pattern[randNumber],'G'),rgbArray(pattern[randNumber],'B')));
+        pixels.setPixelColor(i+1, pixels.Color(rgbArray(pattern[randNumber],'R'),rgbArray(pattern[randNumber],'G'),rgbArray(pattern[randNumber],'B')));
+        pixels.setPixelColor(i+2, pixels.Color(rgbArray(pattern[randNumber],'R'),rgbArray(pattern[randNumber],'G'),rgbArray(pattern[randNumber],'B')));
+        
+        pixels.setPixelColor((i+pixelNum), pixels.Color(rgbArray(pattern[randNumber2],'R'),rgbArray(pattern[randNumber2],'G'),rgbArray(pattern[randNumber2],'B')));
+        pixels.setPixelColor((i+pixelNum)+1, pixels.Color(rgbArray(pattern[randNumber2],'R'),rgbArray(pattern[randNumber2],'G'),rgbArray(pattern[randNumber2],'B')));
+        pixels.setPixelColor((i+pixelNum)+2, pixels.Color(rgbArray(pattern[randNumber2],'R'),rgbArray(pattern[randNumber2],'G'),rgbArray(pattern[randNumber2],'B')));
+        
+        pixels.setPixelColor((i+pixelNum*2), pixels.Color(rgbArray(pattern[randNumber3],'R'),rgbArray(pattern[randNumber3],'G'),rgbArray(pattern[randNumber3],'B')));
+        pixels.setPixelColor((i+pixelNum*2)+1, pixels.Color(rgbArray(pattern[randNumber3],'R'),rgbArray(pattern[randNumber3],'G'),rgbArray(pattern[randNumber3],'B')));
+        pixels.setPixelColor((i+pixelNum*2)+2, pixels.Color(rgbArray(pattern[randNumber3],'R'),rgbArray(pattern[randNumber3],'G'),rgbArray(pattern[randNumber3],'B')));
+        
+        pixels.setPixelColor((i+pixelNum*3), pixels.Color(rgbArray(pattern[randNumber4],'R'),rgbArray(pattern[randNumber4],'G'),rgbArray(pattern[randNumber4],'B')));
+        pixels.setPixelColor((i+pixelNum*3)+1, pixels.Color(rgbArray(pattern[randNumber4],'R'),rgbArray(pattern[randNumber4],'G'),rgbArray(pattern[randNumber4],'B')));
+        pixels.setPixelColor((i+pixelNum*3)+2, pixels.Color(rgbArray(pattern[randNumber4],'R'),rgbArray(pattern[randNumber4],'G'),rgbArray(pattern[randNumber4],'B')));
+
+        pixels.setPixelColor((i+pixelNum*4), pixels.Color(rgbArray(pattern[randNumber5],'R'),rgbArray(pattern[randNumber5],'G'),rgbArray(pattern[randNumber5],'B')));
+        pixels.setPixelColor((i+pixelNum*4)+1, pixels.Color(rgbArray(pattern[randNumber5],'R'),rgbArray(pattern[randNumber5],'G'),rgbArray(pattern[randNumber5],'B')));
+        pixels.setPixelColor((i+pixelNum*4)+2, pixels.Color(rgbArray(pattern[randNumber5],'R'),rgbArray(pattern[randNumber5],'G'),rgbArray(pattern[randNumber5],'B')));
+       // Serial.println(i); 
         pixels.show();
+        delay(100);
+        /*pixels.setPixelColor(i, 0,0,0);
+        pixels.setPixelColor(i+1, 0,0,0);
+        pixels.setPixelColor(i+2, 0,0,0);
+        pixels.show();*/
     }
        
 }
 
+
 void circleLightReverse(int num , String RGB){
-    for(int i= ((num+1)*pixelNum) ; i> num*pixelNum ;i-=3){
-        pixels.setPixelColor(i, pixels.Color(rgbArray(RGB,'R'),rgbArray(RGB,'G'),rgbArray(RGB,'B')));
+    for(int i= ((num+1)*pixelNum)-1 ; i> num*pixelNum ;i-=3){
+       /* pixels.setPixelColor(i, pixels.Color(rgbArray(RGB,'R'),rgbArray(RGB,'G'),rgbArray(RGB,'B')));
         pixels.setPixelColor(i-1, pixels.Color(rgbArray(RGB,'R'),rgbArray(RGB,'G'),rgbArray(RGB,'B')));
         pixels.setPixelColor(i-2, pixels.Color(rgbArray(RGB,'R'),rgbArray(RGB,'G'),rgbArray(RGB,'B')));
        // Serial.println(i); 
-        pixels.show();
+        pixels.show();*/
         delay(100);
         pixels.setPixelColor(i, 0,0,0);
         pixels.setPixelColor(i-1, 0,0,0);
@@ -167,6 +204,39 @@ void circleLightReverse(int num , String RGB){
        
 }
 
+
+void circleLightReverse4(){
+    for(int i= pixelNum-1 ; i> 0 ;i-=3){
+       /* pixels.setPixelColor(i, pixels.Color(rgbArray(RGB,'R'),rgbArray(RGB,'G'),rgbArray(RGB,'B')));
+        pixels.setPixelColor(i-1, pixels.Color(rgbArray(RGB,'R'),rgbArray(RGB,'G'),rgbArray(RGB,'B')));
+        pixels.setPixelColor(i-2, pixels.Color(rgbArray(RGB,'R'),rgbArray(RGB,'G'),rgbArray(RGB,'B')));
+       // Serial.println(i); 
+        pixels.show();*/
+        pixels.setPixelColor(i, pixels.Color(0,0,0));
+        pixels.setPixelColor(i-1, pixels.Color(0,0,0));
+        pixels.setPixelColor(i-2, pixels.Color(0,0,0));
+        
+        pixels.setPixelColor((i+pixelNum), pixels.Color(0,0,0));
+        pixels.setPixelColor((i+pixelNum)-1, pixels.Color(0,0,0));
+        pixels.setPixelColor((i+pixelNum)-2, pixels.Color(0,0,0));
+        
+        pixels.setPixelColor((i+pixelNum*2), pixels.Color(0,0,0));
+        pixels.setPixelColor((i+pixelNum*2)-1, pixels.Color(0,0,0));
+        pixels.setPixelColor((i+pixelNum*2)-2, pixels.Color(0,0,0));
+        
+        pixels.setPixelColor((i+pixelNum*3), pixels.Color(0,0,0));
+        pixels.setPixelColor((i+pixelNum*3)-1, pixels.Color(0,0,0));
+        pixels.setPixelColor((i+pixelNum*3)-2, pixels.Color(0,0,0));
+
+        pixels.setPixelColor((i+pixelNum*4), pixels.Color(0,0,0));
+        pixels.setPixelColor((i+pixelNum*4)-1, pixels.Color(0,0,0));
+        pixels.setPixelColor((i+pixelNum*4)-2, pixels.Color(0,0,0));
+       // Serial.println(i); 
+        pixels.show();
+        delay(100);
+    }
+       
+}
 /*void beepLight(int num, String RGB){
     openSingle (num , RGB);
     delay(100);
@@ -175,7 +245,7 @@ void circleLightReverse(int num , String RGB){
 void loop() {
 int i = 0;
 while(i < 6){
-  if(state == 0){
+ /* if(state == 0){
    openSingle(0,pattern[i]);
    delay(delayval); 
    openSingle(0,"000000000");
@@ -207,11 +277,27 @@ while(i < 6){
    delay(delayval); 
    state = 0;
    i++;
+  }*/
+  if(state == 0){
+   circleLight(0,pattern[0]);
+   circleLight(1,pattern[1]);
+   circleLight(2,pattern[2]);
+   circleLight(3,pattern[3]);
+   circleLight(4,pattern[4]);
+   circleLightReverse(0,pattern[0]);
+   circleLightReverse(1,pattern[1]);
+   circleLightReverse(2,pattern[2]);
+   circleLightReverse(3,pattern[3]);
+   circleLightReverse(4,pattern[3]);
+   state = 1;
   }
- 
+  else if(state == 1){
+     circleLight4();
+     circleLightReverse4();
+  }
    
   //checkStatus(ledstatus);
-}  
+  }  
   
 
   
