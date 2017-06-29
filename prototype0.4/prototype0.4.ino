@@ -8,15 +8,21 @@
 
 // Which pin on the Arduino is connected to the NeoPixels?
 // On a Trinket or Gemma we suggest changing this to 1
-#define PIN            D1
+#define PIN1            D1
+#define PIN2            D2
+#define PIN3            D3
+#define PIN4            D4
 
 // How many NeoPixels are attached to the Arduino?
-#define NUMPIXELS      384
+#define NUMPIXELS      96
 
 // When we setup the NeoPixel library, we tell it how many pixels, and which pin to use to send signals.
 // Note that for older NeoPixel strips you might need to change the third parameter--see the strandtest
 // example for more information on possible values.
-Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN1, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel pixels2 = Adafruit_NeoPixel(NUMPIXELS, PIN2, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel pixels3 = Adafruit_NeoPixel(NUMPIXELS, PIN3, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel pixels4 = Adafruit_NeoPixel(NUMPIXELS, PIN4, NEO_GRB + NEO_KHZ800);
 
 int delayval = 1000; // delay for half a secon
 const int pixelNum = 24;
@@ -37,37 +43,11 @@ void setup() {
    Serial.begin(115200);
 }
 
-void checkStatus(int s[16]){
-  for(int i = 0; i < 16; i++){
-    if(s[i] == 0){
-        Serial.print("LED NUMBER" );
-        Serial.print(i);
-        Serial.println(": CLOSE ");
-    }
-    else if(s[i] == 1){
-        Serial.print("LED NUMBER" );
-        Serial.print(i);
-        Serial.println(": OPEN ");
-    }  
-  }  
-}
 
-void setStatus(int num , int stat){
-    switch (stat){
-      case 0:
-        ledstatus[num] = stat;
-        openSingle(num,defaultRGB);
-        break;
-      case 1:
-        ledstatus[num] = stat;
-        openSingle(num,"255255255");
-        break;
-    }
-}
 
-void rotateClockwise(){
-     
-}
+
+
+
 
 unsigned long createRGB(int r, int g, int b)
 {   
@@ -128,11 +108,38 @@ void quadantChoose(int num, int q , String RGB){ //choose circle ,quadrant ,RED 
 }
 
 void openSingle(int num , String RGB){ //choose circle ,quadrant ,RED , GREEN , BLUE
-    for(int i= num*pixelNum ; i< ((num+1)*pixelNum) ;i++){
-        pixels.setPixelColor(i, pixels.Color(rgbArray(RGB,'R'),rgbArray(RGB,'G'),rgbArray(RGB,'B')));
-       // Serial.println(i); 
+    if(num > 11){
+        num -= 12;
+        for(int i= num*pixelNum ; i< ((num+1)*pixelNum) ;i++){
+          pixels4.setPixelColor(i, pixels4.Color(rgbArray(RGB,'R'),rgbArray(RGB,'G'),rgbArray(RGB,'B')));
+        // Serial.println(i); 
+      }
+      pixels4.show(); // This sends the updated pixel color to the hardware.
     }
-    pixels.show(); // This sends the updated pixel color to the hardware.
+    else if(num > 7){
+        num -= 8;
+        for(int i= num*pixelNum ; i< ((num+1)*pixelNum) ;i++){
+          pixels3.setPixelColor(i, pixels3.Color(rgbArray(RGB,'R'),rgbArray(RGB,'G'),rgbArray(RGB,'B')));
+        // Serial.println(i); 
+      }
+      pixels3.show(); // This sends the updated pixel color to the hardware.
+    }
+    else if(num > 3){
+        num -= 4;
+        for(int i= num*pixelNum ; i< ((num+1)*pixelNum) ;i++){
+          pixels2.setPixelColor(i, pixels2.Color(rgbArray(RGB,'R'),rgbArray(RGB,'G'),rgbArray(RGB,'B')));
+        // Serial.println(i); 
+      }
+      pixels2.show(); // This sends the updated pixel color to the hardware.
+    }
+    else{
+     for(int i= num*pixelNum ; i< ((num+1)*pixelNum) ;i++){
+          pixels.setPixelColor(i, pixels.Color(rgbArray(RGB,'R'),rgbArray(RGB,'G'),rgbArray(RGB,'B')));
+        // Serial.println(i); 
+      }
+      pixels.show(); // This sends the updated pixel color to the hardware.
+    }
+    
 }
 
 void circleLight(int num , String RGB){
@@ -289,8 +296,8 @@ int i = 0;
    circleLightReverse(2,pattern[2]);
    circleLightReverse(3,pattern[3]);
    circleLightReverse(4,pattern[3]);*/
-   for(int i = 0 ; i <= 15 ; i++){
-   openSingle(i,pattern[i%3]);
+   for(int i = 0 ; i <= 16 ; i++){
+   openSingle(i,"255000000");
    }
    state = 1;
    delay(delayval);
@@ -298,15 +305,15 @@ int i = 0;
   else if(state == 1){
     /* circleLight4();
      circleLightReverse4();*/
-   for(int i = 0 ; i <= 15 ; i++){
-   openSingle(i,pattern[i%4]);}
+   for(int i = 0 ; i <= 16 ; i++){
+   openSingle(i,"000255000");}
 
      state = 2;
      delay(delayval);
   }
   else if(state == 2){
-   for(int i = 0 ; i <= 15 ; i++){
-   openSingle(i,pattern[i%5]);}
+   for(int i = 0 ; i <= 16 ; i++){
+   openSingle(i,"000000255");}
 
    delay(delayval);
    state = 0;
