@@ -132,7 +132,7 @@ void openSingle(int num , String RGB){ //choose circle ,quadrant ,RED , GREEN , 
         pixels.setPixelColor(i, pixels.Color(rgbArray(RGB,'R'),rgbArray(RGB,'G'),rgbArray(RGB,'B')));
        // Serial.println(i); 
     }
-    pixels.show(); // This sends the updated pixel color to the hardware.
+    
 }
 
 void circleLight(int num , String RGB){
@@ -292,6 +292,7 @@ int i = 0;
    for(int i = 0 ; i <= 15 ; i++){
    openSingle(i,pattern[i%3]);
    }
+   pixels.show();
    state = 1;
    delay(delayval);
   }
@@ -300,14 +301,30 @@ int i = 0;
      circleLightReverse4();*/
    for(int i = 0 ; i <= 15 ; i++){
    openSingle(i,pattern[i%4]);}
-
+   pixels.show();
      state = 2;
      delay(delayval);
   }
   else if(state == 2){
    for(int i = 0 ; i <= 15 ; i++){
    openSingle(i,pattern[i%5]);}
-
+   pixels.show();
+   delay(delayval);
+   state = 3;
+     /*openSingle(0,pattern[0]);
+     openSingle(1,pattern[1]);
+     openSingle(2,pattern[2]);
+     openSingle(3,pattern[3]);
+     openSingle(4,pattern[4]);*/
+   
+  }
+  else if(state == 3){
+    int j = 0;
+   for(int i = 15 ; i >= 0 ; i--){
+   openSingle(i,pattern[j%5]);
+   j++;
+   }
+   pixels.show();
    delay(delayval);
    state = 0;
      /*openSingle(0,pattern[0]);
