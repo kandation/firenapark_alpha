@@ -1,4 +1,3 @@
-#include <string.h>
 #include "Display.h"
 #include <Arduino.h>
 
@@ -13,13 +12,6 @@ int Display::int2hex(int R, int G, int B){
   return (R<<16)|(G<<8)|B;
 }
 
-byte* Display::hex2rgb(int rgbInt){
-  byte b = rgbInt & 0x0000ff;
-  byte g = (rgbInt & 0x00ff00) >> 8;
-  byte r = (rgbInt & 0xff0000) >> 16;
-  byte res[3] = {r,g,b};
-  return res;
-}
 void Display::add_pixel(byte value[], int arrSize){
 /*
  * add pixel by position array and fill by defualt color

@@ -3,6 +3,7 @@
 #include <Arduino.h>
 // Local Library
 #include "Display.h"
+#include "RGB.h"
 
 #ifdef __AVR__
   #include <avr/power.h>
@@ -20,14 +21,14 @@ void openSingle(int num, uint32_t RGB){
   for(int i= num*NUM_RING_ONE_PIX ; i< ((num+1)*NUM_RING_ONE_PIX) ;i++){
     pixels.setPixelColor(i,RGB);
   }
-  pixels.show();
+  //pixels.show();
  }
 
  void openSingleRGB(int num, byte r, byte g, byte b){
   for(int i= num*NUM_RING_ONE_PIX ; i< ((num+1)*NUM_RING_ONE_PIX) ;i++){
     pixels.setPixelColor(i,r,g,b);
   }
-  pixels.show();
+  //pixels.show();
  }
 class DisplayRender{
   const static int map_size = 16;
@@ -56,6 +57,7 @@ public:
       //Serial.print(";");
   }
   //Serial.println();
+  pixels.show();
  }
 
  void ledIntitialize(){
@@ -83,9 +85,32 @@ void setup() {
   Serial.begin(9600);
 
   pixels.begin();
-  openSingleRGB(0,0,255,0);
-  pixels.show();
-  delay(1000);
+  RGB rgb=RGB(0,0,0);
+  
+  
+  int yyy=0;
+ while(yyy<8){
+  for(int i=0;i<=360;i++){
+    rgb = rgb.hsl2rgb(i,100,50);
+    for(int k=0;k<16;k++){
+      openSingle(k,rgb.toInt32());
+    }
+    
+    delay(1);
+    pixels.show();
+  }
+  for(int i=360;i>=0;i--){
+    rgb = rgb.hsl2rgb(i,100,50);
+    for(int k=0;k<16;k++){
+      openSingle(k,rgb.toInt32());
+    }
+    delay(1);
+    pixels.show();
+  }
+  yyy++;
+ }
+  
+   delay(2000);
   
   display.clear_pixel();
   display.add_pixel(box,4);
@@ -104,61 +129,29 @@ void setup() {
   render.setDisplay(display);
   render.updateMap();
   delay(2000);
-  
-  
-  
-  //display.add_pixel(bb,3);
-  
-  /*for(int i=0;i<16;i++){
-    Serial.print(i);
-    Serial.print(":");
-    display.rotate_left();
-    Serial.println(display.get_color()[i]);
-   /*for(int i=0;i<3;i++){
-    Serial.println(display.hex2rgb(16777215)[i],HEX);
-   }
-    
-  } */
+
   display.clear_pixel();
   display.add_pixel(cpe,8);
   render.setDisplay(display);
   render.updateMap();
   delay(1000);
 
-   display.clear_pixel();
+  display.clear_pixel();
   display.add_pixel(line,4);
   render.setDisplay(display);
   render.updateMap();
   delay(2000);
   Serial.println("Wait");
- 
-  
   
 
 }
- 
-class BoxOject{
-public:
-  int a;
-  
-};
-
-class GeneratePaluse{
-  
-};
-
 
 int count = 0;
 void loop(){
   render.updateMap();
-  pixels.show();
-  /*if(count == 5){
-    display.clear_pixel();
-    display.add_pixel(cpe,8);
-    render.setDisplay(display);
-  }*/
-  if(count > 10){
+  //pixels.show();
 
+  if(count > 10){
     display.rotate_left();
     render.setDisplay(display);
    // delay(1000);

@@ -3,6 +3,7 @@
 #include <Arduino.h>
 #include "Display.h"
 #include "Globalconfig.h"
+#include "RingColor.h"
 
 class Display{
   static Globalconfig globalconfig;
@@ -13,6 +14,7 @@ public:
   byte pos[globalconfig.MAP_SIZE];
   int color[globalconfig.MAP_SIZE];
   char type[globalconfig.MAP_SIZE];
+  RingColor ring[globalconfig.MAP_SIZE]; 
 
 
   Display();
@@ -23,7 +25,6 @@ public:
   void rotate_left();
   void rotate_right();
   int int2hex(int,int,int);
-  byte* hex2rgb(int);
   int *get_color(){
     return color;
   }
