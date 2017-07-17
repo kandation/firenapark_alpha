@@ -59,6 +59,20 @@ public:
   //Serial.println();
   pixels.show();
  }
+void FadingLED(int s,int f,int d){
+   RGB rgb=RGB(0,0,0);
+     int x1 = (s <= f) ? s:f;
+     int x2 = (s <= f) ? f:s;
+     int x3 = (s <= f) ? d/(f-s):d/(s-f);
+     for( int i = x1 ;i <= x2 ; i++){
+      rgb = rgb.hsl2rgb(i,100,50);
+      for(int k=0;k<16;k++){
+        openSingle(k,rgb.toInt32());
+      }
+      delay(x3);
+      pixels.show();
+    }
+}
 
  void ledIntitialize(){
   
@@ -90,23 +104,25 @@ void setup() {
   
   int yyy=0;
  while(yyy<8){
-  for(int i=0;i<=360;i++){
-    rgb = rgb.hsl2rgb(i,100,50);
+ for(int i=0;i<=50;i++){
+    rgb = rgb.hsl2rgb(0,100,i);
     for(int k=0;k<16;k++){
       openSingle(k,rgb.toInt32());
     }
     
-    delay(1);
+    delay(100);
     pixels.show();
   }
-  for(int i=360;i>=0;i--){
-    rgb = rgb.hsl2rgb(i,100,50);
+  for(int i=50;i>=0;i--){
+    rgb = rgb.hsl2rgb(0,100,i);
     for(int k=0;k<16;k++){
       openSingle(k,rgb.toInt32());
     }
-    delay(1);
+    delay(100);
     pixels.show();
   }
+ /* FadingLED(0,360,720);
+  FadingLED(360,0,720);*/
   yyy++;
  }
   
