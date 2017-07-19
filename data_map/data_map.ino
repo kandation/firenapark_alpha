@@ -100,31 +100,49 @@ void setup() {
 
   pixels.begin();
   RGB rgb=RGB(0,0,0);
-  
-  
+  int hslcolor[16];
+  int fadeprogress[16];
+  int fadedirection[16];
+ 
+  for(int i=0; i < 16; i++){
+    fadedirection[i] = 1;  
+    fadeprogress[i] = random(1,49);  
+    hslcolor[i] = random(0,360);  
+  }
+
   int yyy=0;
- while(yyy<8){
- for(int i=0;i<=50;i++){
-    rgb = rgb.hsl2rgb(0,100,i);
+// while(yyy<8){
+  
+ for(int i=0;i<=1000;i++){
+    
     for(int k=0;k<16;k++){
+      fadeprogress[k]+=fadedirection[k]; 
+      rgb = rgb.hsl2rgb(hslcolor[k],75,fadeprogress[k]);
+      if(fadeprogress[k]==50 || fadeprogress[k]==0){
+          fadedirection[k] *= -1; 
+       }
+   //  rgb = rgb.hsl2rgb(hslcolor[k],100,fadeprogress[i]);
+     // fadeprogress[i] = (fadeprogress[i]++) % 50;
       openSingle(k,rgb.toInt32());
     }
     
-    delay(100);
+    delay(33);
     pixels.show();
   }
-  for(int i=50;i>=0;i--){
-    rgb = rgb.hsl2rgb(0,100,i);
+  /*for(int i=50;i>=0;i--){
     for(int k=0;k<16;k++){
+      rgb = rgb.hsl2rgb(hslcolor[k],100,(i+fadeprogress[i])%50);
+      //rgb = rgb.hsl2rgb(hslcolor[k],100,fadeprogress[i]--);
+    //  fadeprogress[i] = (fadeprogress[i]--) % 50;
       openSingle(k,rgb.toInt32());
     }
-    delay(100);
+    delay(33);
     pixels.show();
-  }
+  }*/
  /* FadingLED(0,360,720);
   FadingLED(360,0,720);*/
-  yyy++;
- }
+ // yyy++;
+ //}
   
    delay(2000);
   
