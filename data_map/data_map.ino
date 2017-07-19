@@ -4,6 +4,7 @@
 // Local Library
 #include "Display.h"
 #include "RGB.h"
+#include <math.h>
 
 #ifdef __AVR__
   #include <avr/power.h>
@@ -96,12 +97,12 @@ void setup() {
 #endif
   // End of trinket special code
 
-  Serial.begin(9600);
+  Serial.begin(115200);
 
   pixels.begin();
   RGB rgb=RGB(0,0,0);
   int hslcolor[16];
-  int fadeprogress[16];
+  double fadeprogress[16];
   int fadedirection[16];
  
   for(int i=0; i < 16; i++){
@@ -113,14 +114,21 @@ void setup() {
   int yyy=0;
 // while(yyy<8){
   
- for(int i=0;i<=1000;i++){
+ for(int i=0;i<=100000;i++){
     
     for(int k=0;k<16;k++){
-      fadeprogress[k]+=fadedirection[k]; 
+     
+      fadeprogress[k]+=  fadedirection[k]*exp(fadeprogress[k]/25); 
+     // fadeprogress[k]+=  fadedirection[k]*(log10(fadeprogress[k]+2)+fadeprogress[k]/10); 
       rgb = rgb.hsl2rgb(hslcolor[k],75,fadeprogress[k]);
-      if(fadeprogress[k]==50 || fadeprogress[k]==0){
+     
+      if(fadeprogress[k]>=50 || fadeprogress[k]<=1){
+        fadeprogress[k] = (fadeprogress[k]>=50) ? 50 : 1;
           fadedirection[k] *= -1; 
+          
        }
+       Serial.print(fadeprogress[0]);
+          Serial.println();
    //  rgb = rgb.hsl2rgb(hslcolor[k],100,fadeprogress[i]);
      // fadeprogress[i] = (fadeprogress[i]++) % 50;
       openSingle(k,rgb.toInt32());
