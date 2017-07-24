@@ -14,7 +14,8 @@
 #define NUM_RING_ALL_PIX 384
 const int NUM_RING_ONE_PIX = 24;
 int DELAY_VAL = 1000;
-
+int sensorPin = A0;
+int sensorValue;
 
 /* ------ Intitialize --------*/
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUM_RING_ALL_PIX, LED_PIN, NEO_GRB + NEO_KHZ800);
@@ -108,33 +109,43 @@ void setup() {
   for(int i=0; i < 16; i++){
     fadedirection[i] = 1;  
     fadeprogress[i] = random(1,49);  
-    hslcolor[i] = random(0,360);  
+   // hslcolor[i] = random(0,360);  
   }
 
   int yyy=0;
 // while(yyy<8){
   
  for(int i=0;i<=100000;i++){
-    
+  if(i%10==0){
+      sensorValue = analogRead (sensorPin);
+      }
+  if(i%500==0){
+      for(int j=0; j < 16; j++){
+       
+        hslcolor[j] = random(0,360);  
+      }}
     for(int k=0;k<16;k++){
      
-      fadeprogress[k]+=  fadedirection[k]*exp(fadeprogress[k]/25); 
-     // fadeprogress[k]+=  fadedirection[k]*(log10(fadeprogress[k]+2)+fadeprogress[k]/10); 
-      rgb = rgb.hsl2rgb(hslcolor[k],75,fadeprogress[k]);
-     
-      if(fadeprogress[k]>=50 || fadeprogress[k]<=1){
-        fadeprogress[k] = (fadeprogress[k]>=50) ? 50 : 1;
+      fadeprogress[k]+=  fadedirection[k]*exp((fadeprogress[k]/(40-sensorValue*30/630))); 
+  
+       if(fadeprogress[k]>=47 || fadeprogress[k]<=0){
+        fadeprogress[k] = (fadeprogress[k]>=47) ? 47 : 0;
           fadedirection[k] *= -1; 
           
        }
-       Serial.print(fadeprogress[0]);
-          Serial.println();
+      rgb = rgb.hsl2rgb(hslcolor[k],100,fadeprogress[k]);
+     
+     
+    //   Serial.print(fadeprogress[0]);
+       //   Serial.println();
    //  rgb = rgb.hsl2rgb(hslcolor[k],100,fadeprogress[i]);
      // fadeprogress[i] = (fadeprogress[i]++) % 50;
       openSingle(k,rgb.toInt32());
     }
     
     delay(33);
+     Serial.print(sensorValue);
+          Serial.println();
     pixels.show();
   }
   /*for(int i=50;i>=0;i--){
