@@ -109,27 +109,37 @@ void setup() {
   for(int i=0; i < 16; i++){
     fadedirection[i] = 1;  
     fadeprogress[i] = random(1,49);  
-   // hslcolor[i] = random(0,360);  
+    hslcolor[i] = random(0,360);  
   }
 
   int yyy=0;
 // while(yyy<8){
   
  for(int i=0;i<=100000;i++){
-  if(i%10==0){
-      sensorValue = analogRead (sensorPin);
-      }
-  if(i%500==0){
+  if(1){
+      sensorValue =  analogRead (sensorPin);
+
+     if(sensorValue > 100){
+        sensorValue = 100;
+      }   
+  }
+  /*if(i%500==0){
       for(int j=0; j < 16; j++){
        
         hslcolor[j] = random(0,360);  
-      }}
+      }}*/
     for(int k=0;k<16;k++){
      
-      fadeprogress[k]+=  fadedirection[k]*exp((fadeprogress[k]/(40-sensorValue*30/630))); 
-  
-       if(fadeprogress[k]>=47 || fadeprogress[k]<=0){
-        fadeprogress[k] = (fadeprogress[k]>=47) ? 47 : 0;
+      fadeprogress[k]+=  fadedirection[k]*exp((fadeprogress[k]/(40.00-sensorValue*39/100))); 
+      if((40.00-sensorValue*39/100)<=15){
+      for(int j=0; j < 16; j++){
+       
+        hslcolor[j] = random(0,360);  
+      }
+      }
+      
+       if(fadeprogress[k]>=47 || fadeprogress[k]<=5){
+        fadeprogress[k] = (fadeprogress[k]>=47) ? 47 : 5;
           fadedirection[k] *= -1; 
           
        }
@@ -144,7 +154,11 @@ void setup() {
     }
     
     delay(33);
+     Serial.print(40.00-sensorValue*39/100);
+     Serial.print("\t");
      Serial.print(sensorValue);
+     Serial.print("\t");
+     Serial.print(analogRead (sensorPin));
           Serial.println();
     pixels.show();
   }
