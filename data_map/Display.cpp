@@ -28,7 +28,8 @@ void Display::add_pixel(byte value[], int rgb_color[], int arrSize){
  */
   for(int i=0;i<arrSize;i++){
     pos[value[i]] = value[i];
-    color[value[i]] = rgb_color[i];
+    color[value[i]] = int2hex(rgb_color[0],rgb_color[1],rgb_color[2]);
+    //memo:\ Fix color[] to One ring system not 
   }  
 }
 void Display::add_pixel_clear(byte value[]){
