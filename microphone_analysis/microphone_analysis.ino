@@ -130,6 +130,9 @@ int sound_timer_realtime_prev[] = {0,0};
 // Graph statistic
 int sound_graph_min_avr = 0;
 int sound_graph_max_avr = 0;
+int sound_graph_long_mean = 0;
+int sound_graph_long_sum = 0;
+int sound_graph_long_count = 0;
 
 
 
@@ -143,6 +146,11 @@ float music_type_score[] = {0,0,0,0};
 * 
 *
 */
+
+float music_tempo_score[] = {0,0,0,0};
+/* [0] high peek per realtime_sampling
+ * [1] high percentage (vol > 50) per long_mean
+ */
 
 
 
@@ -176,28 +184,28 @@ void setup(){
 void loop() {
   now_time_milli=millis();
   // Global Delay
-  if(now_time_milli - prev_milli >= 20 ){
+  if(now_time_milli - prev_milli >= 10 ){
   analog_read_once = analogRead (sensorPin);
   graph.push(analog_read_once);
   
   //Transform real Sensor amplitude to Percentage Amplitude (Volume)
-  sound_vol_percentage = ((float)analog_read_once/(float)microphone_max_threshole)*100;
+  sound_vol_percentage = ((float)analog_read_once/(float)microphone_max_threshole)*100.0;
 
   
-  if(sound_vol_percentage >= 60){
+  if(sound_vol_percentage >= 50){
   // เพลงมันส์ๆ ที่มักจะมีกราฟอยู่ด้านบน
-    digitalWrite(D1,HIGH);
+    digitalWrite(D3,HIGH);
   }else{
-    digitalWrite(D1,LOW);
+    digitalWrite(D3,LOW);
   }
 
    
   //ระบบวัดเสียงเพลงจากการตรวจสอบ peek
   if(graph.check_peek()){
-    float temp_peek_range_precentage = 0.9112;
-    if(abs(analog_read_once - sound_realtime_mean) > microphone_range*temp_peek_range_precentage){
+    float temp_peek_range_precentage = 0.08633;
+    if(analog_read_once - sound_realtime_mean > microphone_range*temp_peek_range_precentage){
       digitalWrite(D7,HIGH);  
-    }else if(abs(analog_read_once - sound_realtime_mean) < -(microphone_range*temp_peek_range_precentage)){
+    }else if(analog_read_once - sound_realtime_mean < -(microphone_range*temp_peek_range_precentage)){
       digitalWrite(D6,HIGH);
     } 
 
@@ -248,7 +256,9 @@ void loop() {
   //Sound mod begin
   sound_timer_realtime_prev[0]+=1;
   sound_timer_realtime_prev[1]+=1;
+  
   if(sound_timer_realtime_prev[0] >= sound_realtime_sampling){
+    //หา realtime_sampling_average
     sound_realtime_mean = sound_realtime_sum/sound_realtime_sampling;
     sound_long_sum += sound_realtime_sum;
     sound_realtime_sum = 0;
@@ -257,11 +267,22 @@ void loop() {
   }
   if(sound_timer_realtime_prev[1] >= (10*sound_realtime_sampling)){
     sound_long_mean_prev = sound_long_mean;
-    sound_long_mean = sound_long_sum/(10*sound_realtime_sampling);
+    sound_long_mean = sound_long_sum/(10*sound_realtime_sampling);  
+
+    // reset Long_sum
     sound_long_sum = 0;
     sound_timer_realtime_prev[1] = 0;
+    
+       
   }
   //Sound Mod End
+
+   // หาผลรวมของเพลง
+    sound_graph_long_count += 1;
+    sound_graph_long_sum += analog_read_once;
+    sound_graph_long_mean = sound_graph_long_sum/sound_graph_long_count; 
+    //Serial.print(sound_graph_long_count);
+    //Serial.print("\t");
 
   //Min Average
   if(analog_read_once < sound_realtime_mean){
@@ -287,6 +308,8 @@ void loop() {
   //Find Peek clap
   if(is_slilence){
     digitalWrite(D1,HIGH);
+    sound_graph_long_count = 0;
+    sound_graph_long_sum = 0;
 
     // Clap check v2
     if(analog_read_once > sound_clap_threshole_high && !is_clap){
@@ -349,9 +372,11 @@ void loop() {
     Serial.print(sound_long_mean);
     Serial.print("\t");
     Serial.print(sound_vol_percentage);
-    Serial.println();
     Serial.print("\t");
-    Serial.print(is_clap);
+    //Serial.print(is_clap);
+    //Serial.print("\t");
+    Serial.print(sound_graph_long_mean);
+    Serial.println();
     prev_milli = now_time_milli;
   }
 
